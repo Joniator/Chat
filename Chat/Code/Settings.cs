@@ -10,7 +10,6 @@ namespace Chat
 {
     public class Settings
     {
-        // Blöd
         static string saveFile = @"Settings.xml";
 
         IPAddress ipAddress;
