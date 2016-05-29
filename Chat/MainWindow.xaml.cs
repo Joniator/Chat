@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,52 @@ namespace Chat
         {
             InitializeComponent();
             client = new Client();
+
+            #region SampleChat
+            ChatMessage newMessage = new ChatMessage()
+            {
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Message = "Yo",
+                Date = DateTime.Now
+            };
+            stackPanelMessages.Children.Add(newMessage);
+
+            newMessage = new ChatMessage()
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Message = "Was geht, alles fit?",
+                From = "Swaggerboy1337",
+                Date = DateTime.Now
+            };
+            stackPanelMessages.Children.Add(newMessage);
+
+            newMessage = new ChatMessage()
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Message = "Kennt wer nen Witz?",
+                From = "DerHomoLord",
+                Date = DateTime.Now
+            };
+            stackPanelMessages.Children.Add(newMessage);
+
+            newMessage = new ChatMessage()
+            {
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Message = 
+                @"In der Schule: Die Lehrerin fragt die Kinder, was deren Eltern beruflich machen. Alle erzählen was, dann ist Fritzchen dran.
+
+„Mein Papa spielt Musik im Puff …“
+
+Die Lehrerin, voll geschockt, geht am selben Abend zu seinen Eltern: „Wie können Sie das Kind in dieser Atmosphäre erziehen?!“
+
+Der Vater: „Eigentlich bin ich Informatiker und spezialisiere mich auf TCP/IP Kommunikationsprotokolle in UNIX-Systemen …
+
+Aber wie soll ich das einem 7jährigen Kind erklären?!“",
+                From = "DerHomoLord",
+                Date = DateTime.Now
+            };
+            stackPanelMessages.Children.Add(newMessage);
+            #endregion  
         }
 
         // Überprüft ob eine Verbindung besteht, baut eine Verbindung auf und passt den Zustand des ToggelButtons entsprechend an.
@@ -60,7 +107,7 @@ namespace Chat
         // Sended eine Chatnachricht an den Server.
         private void buttonSend_Click(object sender, RoutedEventArgs e)
         {
-            // client.SendMessage(textBoxMessage.Text);
+            client.SendMessage(textBoxMessage.Text);
 
             ChatMessage newMessage = new ChatMessage()
             {
@@ -69,6 +116,7 @@ namespace Chat
                 From = textBoxUserName.Text,
                 Date = DateTime.Now
             };
+
             stackPanelMessages.Children.Add(newMessage);
         }
 

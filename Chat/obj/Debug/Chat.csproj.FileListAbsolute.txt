@@ -13,4 +13,6 @@ E:\Schule\Chat\Chat\obj\Debug\Chat.Properties.Resources.resources
 E:\Schule\Chat\Chat\obj\Debug\Chat.csproj.GenerateResource.Cache
 E:\Schule\Chat\Chat\obj\Debug\Chat.exe
 E:\Schule\Chat\Chat\obj\Debug\Chat.pdb
-E:\Schule\Chat\Chat\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\Schule\Chat\Chat\obj\Debug\MediaMessage.g.cs
+E:\Schule\Chat\Chat\obj\Debug\MediaMessage.baml
+E:\Schule\Chat\Chat\obj\Debug\Chat.csprojResolveAssemblyReference.cache

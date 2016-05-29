@@ -44,7 +44,7 @@ namespace Chat
             return (streamRW.ReadLine() == "Login successfull") ? true : false;
         }
 
-        public void SendMessage(string message)
+        public bool SendMessage(string message)
         {
             Message mes = new Message()
             {
@@ -52,12 +52,14 @@ namespace Chat
                 sender = username,
                 sendTime = DateTime.Now
             };
-            Send(mes);
+            return Send(mes);
         }
 
-        public void Send(Message message)
+        public bool Send(Message message)
         {
             streamRW.WriteLine(message.ToString());
+
+            return true;
         }
 
         /// <summary>

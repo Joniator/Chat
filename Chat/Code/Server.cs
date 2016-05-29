@@ -19,7 +19,7 @@ namespace Chat
             started = true;
             connectedUser = new Dictionary<string, Thread>();
             TcpListener tcpListener = new TcpListener(IPAddress.Any, 1337); tcpListener.Start();
-            Console.WriteLine("[Server][{0}]: Listener started", DateTime.Now);
+            Log.WriteLine("[Server][{0}]: Listener started", DateTime.Now);
 
             // Wartet auf Anfragen von Clients solange der Server gestartet ist.
             while (started)
@@ -30,7 +30,7 @@ namespace Chat
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("[Server]" + e.InnerException);
+                    Log.WriteLine("[Server]" + e.InnerException);
                 }
             }
             tcpListener.Stop();
@@ -88,7 +88,7 @@ namespace Chat
         /// <returns></returns>
         void ProcessMessage(string Content)
         {
-            Message receivedMessage = MessageSerializer.Deserialize(Content);
+            Message receivedMessage = Serializer.Deserialize<Message>(Content);
             Command command = (Command)receivedMessage.content;
             switch (command.type)
             {
@@ -98,19 +98,19 @@ namespace Chat
                     {
                         streamRW.WriteLine("Login successfull");
                         username = command.parameter[0];
-                        Console.WriteLine("[Server][{0}]{1} logged in",DateTime.Now, username);
+                        Log.WriteLine("[Server][{0}]{1} logged in",DateTime.Now, username);
                     }
                     else
                     {
                         streamRW.WriteLine("Login failed");
-                        Console.WriteLine("[Server][{0}{1}] failed to log in", DateTime.Now, username);
+                        Log.WriteLine("[Server][{0}{1}] failed to log in", DateTime.Now, username);
                     }
                         break;
                 case CommandType.Message:
-                    Console.WriteLine("[Server][{0}]{1}: {2}", receivedMessage.sendTime, receivedMessage.sender, command.parameter[0]);
+                    Log.WriteLine("[Server][{0}]{1}: {2}", receivedMessage.sendTime, receivedMessage.sender, command.parameter[0]);
                     break;
                 case CommandType.Disconnect:
-                    Console.WriteLine("[Server][{0}]{1}: Disconnected: {2}", receivedMessage.sendTime, receivedMessage.sender, command.parameter[0]);
+                    Log.WriteLine("[Server][{0}]{1}: Disconnected: {2}", receivedMessage.sendTime, receivedMessage.sender, command.parameter[0]);
                     break;
             }
 

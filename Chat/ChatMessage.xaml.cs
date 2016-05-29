@@ -58,6 +58,8 @@ namespace Chat
             }
         }
 
+        int fontSize;
+
         private void UserControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Date = DateTime.Now;

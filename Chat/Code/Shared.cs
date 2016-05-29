@@ -9,6 +9,18 @@ using System.Xml;
 namespace Chat
 {
     /// <summary>
+    /// Log-Klasse um eine geordnete Ausgabe von Protokollierung bereitzustellen.
+    /// </summary
+    public static class Log
+    {
+        public static void WriteLine(string Message, params object[] param)
+        {
+            string message = string.Format(Message, param);
+            Console.WriteLine(message);
+        }
+    }
+
+    /// <summary>
     /// Kombinierter StreamReader und StreamWriter mit vereinfachter Funktionalität.
     /// </summary>
     public class StreamRW
@@ -68,6 +80,8 @@ namespace Chat
     {
         public Command content;
 
+        byte[] media;
+
         public string sender;
 
         public DateTime sendTime;
@@ -82,21 +96,33 @@ namespace Chat
 
         public override string ToString()
         {
-            return MessageSerializer.Serialize(this);
+            return Serializer.Serialize(this,false);
         }
     }
-
-    static class MessageSerializer
+    public static class Serializer
     {
         /// <summary>
         /// Serialisiert das aktuelle Objekt und gibt das Ergebnis als String zurück.
         /// </summary>
-        /// <returns></returns>
-        public static string Serialize(Message toSerialize)
+        /// <param name="indent">True wenn Zeilenumbrüche und Einrückungen beachtet werden sollen.</param>
+        public static string Serialize<T>(T toSerialize, bool indent)
         {
-            string serializedObject;
+            string serializedObject = null;
             if (toSerialize != null)
             {
+                // Überprüft ob Zeilen
+                if (indent)
+                {
+                    StringWriter stringWriter = new StringWriter();
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
+                    serializer.Serialize(stringWriter, toSerialize);
+                    serializedObject = stringWriter.ToString();
+
+                    // Aufräumarbeiten
+                    stringWriter.Close();
+                }
+                else
+                {
                     // Erstellt einen StringWriter der später die Ausgabe des Objektes übernimmt.
                     StringWriter stringWriter = new StringWriter();
 
@@ -110,14 +136,14 @@ namespace Chat
                     });
 
                     // Erstellt einen Serializer, der das Objekt serialisiert und an den XMLWriter übergibt, der sich um die Formatierung kümmert.
-                    XmlSerializer serializer = new XmlSerializer(typeof(Message));
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
                     serializer.Serialize(xmlWriter, toSerialize);
                     serializedObject = stringWriter.ToString();
 
                     // Aufräumarbeiten.
                     xmlWriter.Close();
                     stringWriter.Close();
-
+                }
                 return serializedObject;
             }
             return null;
@@ -128,23 +154,21 @@ namespace Chat
         /// </summary>
         /// <param name="toDeserialize">Das Serialisiert Objekt als string.</param>
         /// <returns></returns>
-        public static Message Deserialize(string toDeserialize)
+        public static T Deserialize<T>(string toDeserialize)
         {
-            Message deserializedObject;
+            T deserializedObject = default(T);
 
             try
             {
                 // Erstellt einen StringReader, der das vom serializer deserialisierte Objekt enthält.
                 StringReader reader = new StringReader(toDeserialize);
-                XmlSerializer serializer = new XmlSerializer(typeof(Message));
-                deserializedObject = (Message)serializer.Deserialize(reader);
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+                deserializedObject = (T)serializer.Deserialize(reader);
             }
             catch (Exception e)
             {
                 Console.WriteLine("Fehler beim Deserialisieren von {0}...: {1}", toDeserialize, e.Message);
-                return null;
             }
-
             return deserializedObject;
 
         }
@@ -162,11 +186,24 @@ namespace Chat
             type = Command;            
         }
     }
-
     public enum CommandType
     {
         Login,
         Message,
+        Image,
         Disconnect
     }
+
+    public class Response
+    {
+        ResponseType type;
+        string parameter;
+    }
+    public enum ResponseType
+    {
+        LoginSuccesfull,
+        LoginFailed,
+        ConectionClosed
+    }
+
 }
