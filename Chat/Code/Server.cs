@@ -19,7 +19,7 @@ namespace Chat
             started = true;
             connectedUser = new Dictionary<string, Thread>();
             TcpListener tcpListener = new TcpListener(IPAddress.Any, 1337); tcpListener.Start();
-            Log.WriteLine("[Server][{0}]: Listener started", DateTime.Now);
+            Log.WriteLine("[Server][{0}]: Listener started at port {1}", DateTime.Now, 1337);
 
             // Wartet auf Anfragen von Clients solange der Server gestartet ist.
             while (started)

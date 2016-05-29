@@ -22,10 +22,16 @@ namespace Chat
     public partial class MainWindow : Window
     {
         Client client;
+        Settings settings;
         public MainWindow()
         {
             InitializeComponent();
             client = new Client();
+
+            settings = Settings.LoadSettings();
+            textBoxLocalServerPort.Text = settings.Port.ToString();
+            textBoxPort.Text = settings.LocalPort.ToString();
+            textBoxServerIP.Text = settings.IpAddress;
 
             #region SampleChat
             ChatMessage newMessage = new ChatMessage()
@@ -124,6 +130,20 @@ Aber wie soll ich das einem 7jährigen Kind erklären?!“",
         private void Window_Closed(object sender, EventArgs e)
         {
             Server.Stop();
+        }
+
+        private void buttonSave_Click(object sender, RoutedEventArgs e)
+        {
+            settings.SaveSettings();
+        }
+        
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (tabItemSettings.IsSelected)
+            {
+
+            }
         }
     }
 }

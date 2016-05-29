@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:Chat"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800" Closed="Window_Closed" MinHeight="250" MinWidth="600" Background="LightGray">
-    <TabControl>
-        <TabItem Header="Chat">
+    <TabControl SelectionChanged="TabControl_SelectionChanged">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -37,7 +36,8 @@
                 </ScrollViewer>
             </Grid>
         </TabItem>
-        <TabItem Header="Einstellungen">
+        
+        <TabItem Name ="tabItemSettings" Header="Einstellungen">
             <ScrollViewer>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -48,20 +48,23 @@
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="88*" />
-                        <ColumnDefinition Width="681*" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="649*" />
                     </Grid.ColumnDefinitions>
-                    
+
                     <!--Server-IP-->
-                    <Label Name="labelServerIP" Content="Server-IP:" Grid.Row="0" Grid.Column="0" />
-                    <TextBox Name="textBoxServerIP" Grid.Row="0" Grid.Column="1" />
+                    <Label Name="labelServerIP" Content="Server-IP" Grid.Row="0" Grid.Column="0" ToolTip="Die IP des Servers, zu dem eine Verbindung aufgebaut werden soll." />
+                    <TextBox Name="textBoxServerIP" Grid.Row="0" Grid.Column="1" ToolTip="Die IP des Servers, zu dem eine Verbindung aufgebaut werden soll." />
 
                     <!--Server-Port-->
-                    <Label Name="labelServerPort" Content="Server-Port:" Grid.Row="1" Grid.Column="0" />
-                    <TextBox Name="textBoxServerPort" Grid.Row="1" Grid.Column="1" />
-                    
-                    
-                    <Button x:Name="buttonSave" Content="Save" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Top" Width="681" Height="30"/>
+                    <Label Name="labelClientPort" Content="Server-Port:" Grid.Row="1" Grid.Column="0" ToolTip="Der Port, an dem der Server eine Verbindung erwartet." />
+                    <TextBox Name="textBoxPort" Grid.Row="1" Grid.Column="1" ToolTip="Der Port, an dem der Server eine Verbindung erwartet." />
+
+                    <!--Local-Server-Port-->
+                    <Label Name="labelLocalPort" Content="Local-Server-Port:" Grid.Row="2" Grid.Column="0" ToolTip="Der Port, an dem der lokale Server auf eine Verbindung wartet." />
+                    <TextBox Name="textBoxLocalServerPort" Grid.Row="2" Grid.Column="1" ToolTip="Der Port, an dem der lokale Server eine Verbindung erwartet." />
+
+                    <Button x:Name="buttonSave" Content="Save" Grid.Column="1" Grid.Row="4" Click="buttonSave_Click" />
                 </Grid>
             </ScrollViewer>
         </TabItem>

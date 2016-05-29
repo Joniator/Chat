@@ -57,9 +57,7 @@ namespace Chat
                 labelDate.Content = value;
             }
         }
-
-        int fontSize;
-
+        
         private void UserControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Date = DateTime.Now;
