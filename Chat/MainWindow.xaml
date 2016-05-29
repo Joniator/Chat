@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800" Closed="Window_Closed" MinHeight="250" MinWidth="600" Background="LightGray">
     <TabControl SelectionChanged="TabControl_SelectionChanged">
+        <TabItem Name="tabItemChat" Header="Chat" HorizontalAlignment="Left" Width="40">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
