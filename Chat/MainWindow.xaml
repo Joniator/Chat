@@ -51,7 +51,7 @@
                         <ColumnDefinition Width="88*" />
                         <ColumnDefinition Width="681*" />
                     </Grid.ColumnDefinitions>
-                    
+
                     <!--Server-IP-->
                     <Label Name="labelServerIP" Content="Server-IP:" Grid.Row="0" Grid.Column="0" />
                     <TextBox Name="textBoxServerIP" Grid.Row="0" Grid.Column="1" />
@@ -59,11 +59,24 @@
                     <!--Server-Port-->
                     <Label Name="labelServerPort" Content="Server-Port:" Grid.Row="1" Grid.Column="0" />
                     <TextBox Name="textBoxServerPort" Grid.Row="1" Grid.Column="1" />
-                    
-                    
+
+
                     <Button x:Name="buttonSave" Content="Save" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Top" Width="681" Height="30"/>
                 </Grid>
             </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Registrieren">
+            <Grid>
+                <!--Username-->
+                <Label Name="labelRegUsername" Content="Username:" Grid.Row="0" Grid.Column="0" Margin="0,10,701,396" />
+                <TextBox Name="textBoxRegUsername" Grid.Row="0" Margin="90,10,293,396" />
+
+                <!--Pasword-->
+                <Label Name="labelRegPassword" Content="Password:" Grid.Column="0" Margin="0,50,701,356" />
+                <TextBox Name="textBoxRegPassword" Margin="90,50,293,356" />
+
+                <Button Name="ButtonRegister" Content="registrieren" Margin="250,380,250,10" Click="buttonRegister_Click"/>
+            </Grid>
         </TabItem>
     </TabControl>
 </Window>

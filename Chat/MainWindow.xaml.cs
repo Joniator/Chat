@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -124,6 +125,21 @@ Aber wie soll ich das einem 7jährigen Kind erklären?!“",
         private void Window_Closed(object sender, EventArgs e)
         {
             Server.Stop();
+        }
+
+        private void buttonRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Database DatBase = new Database();
+
+            try
+            {
+                Log.WriteLine(DatBase.registration(textBoxRegUsername.Text, textBoxRegPassword.Text));
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

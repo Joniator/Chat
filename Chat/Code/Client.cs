@@ -30,7 +30,7 @@ namespace Chat
         /// <returns>Gibt an ob die Verbindung und der Login erfolgreich waren.</returns>
         public bool Connect(string Username, string Password)
         {
-            tcpClient = new TcpClient("localhost", 1337);
+            tcpClient = new TcpClient("87.172.204.102", 1337);
 
             streamRW = new StreamRW(tcpClient.GetStream());
             Message message = new Message()
