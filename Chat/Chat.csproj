@@ -71,6 +71,7 @@
       <DependentUpon>ChatMessage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Code\Client.cs" />
+    <Compile Include="Code\Database.cs" />
     <Compile Include="Code\Server.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\Shared.cs" />

@@ -58,6 +58,7 @@
                     <TextBox Name="textBoxServerIP" Grid.Row="0" Grid.Column="1" ToolTip="Die IP des Servers, zu dem eine Verbindung aufgebaut werden soll." />
 
                     <!--Server-Port-->
+<<<<<<< HEAD
                     <Label Name="labelClientPort" Content="Server-Port:" Grid.Row="1" Grid.Column="0" ToolTip="Der Port, an dem der Server eine Verbindung erwartet." />
                     <TextBox Name="textBoxPort" Grid.Row="1" Grid.Column="1" ToolTip="Der Port, an dem der Server eine Verbindung erwartet." />
 
@@ -66,8 +67,28 @@
                     <TextBox Name="textBoxLocalServerPort" Grid.Row="2" Grid.Column="1" ToolTip="Der Port, an dem der lokale Server eine Verbindung erwartet." />
 
                     <Button x:Name="buttonSave" Content="Save" Grid.Column="1" Grid.Row="4" Click="buttonSave_Click" />
+=======
+                    <Label Name="labelServerPort" Content="Server-Port:" Grid.Row="1" Grid.Column="0" />
+                    <TextBox Name="textBoxServerPort" Grid.Row="1" Grid.Column="1" />
+
+
+                    <Button x:Name="buttonSave" Content="Save" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Top" Width="681" Height="30"/>
+>>>>>>> origin/master
                 </Grid>
             </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Registrieren">
+            <Grid>
+                <!--Username-->
+                <Label Name="labelRegUsername" Content="Username:" Grid.Row="0" Grid.Column="0" Margin="0,10,701,396" />
+                <TextBox Name="textBoxRegUsername" Grid.Row="0" Margin="90,10,293,396" />
+
+                <!--Pasword-->
+                <Label Name="labelRegPassword" Content="Password:" Grid.Column="0" Margin="0,50,701,356" />
+                <TextBox Name="textBoxRegPassword" Margin="90,50,293,356" />
+
+                <Button Name="ButtonRegister" Content="registrieren" Margin="250,380,250,10" Click="buttonRegister_Click"/>
+            </Grid>
         </TabItem>
     </TabControl>
 </Window>
