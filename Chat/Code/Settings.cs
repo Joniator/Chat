@@ -21,8 +21,15 @@ namespace Chat
             }
             set
             {
-                IPAddress.TryParse(value, out ipAddress);
-                Log.WriteLine("[Settings][{0}] {1} set as IPAddress.", DateTime.Now, value);
+                try
+                {
+                    ipAddress = IPAddress.Parse(value);
+                    Log.WriteLine("[Settings][{0}] {1} set as IPAddress.", DateTime.Now, value);
+                }
+                catch
+                {
+                    Log.WriteLine("[Settings][{0}] {1} is not a valid IP Address.", DateTime.Now, value);
+                }
             }
         }
 
@@ -40,31 +47,12 @@ namespace Chat
                         port = value;
                         Log.WriteLine("[Settings][{0}] {1} set as port for server.", DateTime.Now, value);
                 }
-            }
-        }
-
-        int localPort;
-        public int LocalPort
-        {
-            get
-            {
-                return localPort;
-            }
-            set
-            {
-                if (value > 1024 && value < 65536)
+                else
                 {
-                    try
-                    {
-                        TcpListener listener = new TcpListener(IPAddress.Any, value);
-                        listener.Start();
-                        localPort = value;
-                        Log.WriteLine("[Settings][{0}] {1} set as port for local server.", DateTime.Now, value);
-                    }
-                    catch { Log.WriteLine("[Settings][{0}] Port {1} is in use.", DateTime.Now, localPort); }
+                    Log.WriteLine("[Settings][{0}] {1} is not a valid port.", DateTime.Now, value);
                 }
             }
-        }
+        }        
 
         public void SaveSettings()
         {
@@ -80,8 +68,7 @@ namespace Chat
                 new Settings()
                 {
                     IpAddress = "127.0.0.1",
-                    Port = 1337,
-                    LocalPort = 1337
+                    Port = 1337
                 }.SaveSettings();
             }
 

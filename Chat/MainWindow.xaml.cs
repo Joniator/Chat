@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -30,8 +29,7 @@ namespace Chat
             client = new Client();
 
             settings = Settings.LoadSettings();
-            textBoxLocalServerPort.Text = settings.Port.ToString();
-            textBoxPort.Text = settings.LocalPort.ToString();
+            textBoxServerPort.Text = settings.Port.ToString();
             textBoxServerIP.Text = settings.IpAddress;
 
             #region SampleChat
@@ -64,7 +62,7 @@ namespace Chat
             newMessage = new ChatMessage()
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
-                Message = 
+                Message =
                 @"In der Schule: Die Lehrerin fragt die Kinder, was deren Eltern beruflich machen. Alle erzählen was, dann ist Fritzchen dran.
 
 „Mein Papa spielt Musik im Puff …“
@@ -132,33 +130,29 @@ Aber wie soll ich das einem 7jährigen Kind erklären?!“",
         {
             Server.Stop();
         }
-
-<<<<<<< HEAD
+        
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
+            settings.Port = Convert.ToInt32(textBoxServerPort.Text);
+            settings.IpAddress = textBoxServerIP.Text;
             settings.SaveSettings();
+
+            textBoxServerIP.Text = settings.IpAddress;
+            textBoxServerPort.Text = settings.Port.ToString();
         }
         
-
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (tabItemSettings.IsSelected)
-            {
-
-=======
         private void buttonRegister_Click(object sender, RoutedEventArgs e)
         {
-            Database DatBase = new Database();
+            Database dataBase = new Database();
 
             try
             {
-                Log.WriteLine(DatBase.registration(textBoxRegUsername.Text, textBoxRegPassword.Text));
+                Log.WriteLine(dataBase.registration(textBoxRegUsername.Text, textBoxRegPassword.Text));
             }
             catch (Exception)
             {
 
                 throw;
->>>>>>> origin/master
             }
         }
     }
