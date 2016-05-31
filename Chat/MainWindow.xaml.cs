@@ -104,5 +104,14 @@ namespace Chat
                 throw;
             }
         }
+
+        private void textBoxMessage_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                client.SendMessage(textBoxMessage.Text);
+                textBoxMessage.Text = "";
+            }
+        }
     }
 }

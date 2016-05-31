@@ -1,0 +1,16 @@
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\bin\Release\Chat.exe.config
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\bin\Release\Chat.exe
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\bin\Release\Chat.pdb
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\Chat.csprojResolveAssemblyReference.cache
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\ChatMessage.g.cs
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\MainWindow.g.cs
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\MediaMessage.g.cs
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\App.g.cs
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\Chat_MarkupCompile.cache
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\Chat_MarkupCompile.lref
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\ChatMessage.baml
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\MainWindow.baml
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\MediaMessage.baml
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\Chat.g.resources
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\Chat.exe
+D:\Users\Chris\Documents\Schule\Programmieren\SchulProjekt\Chat\Chat\obj\Release\Chat.pdb

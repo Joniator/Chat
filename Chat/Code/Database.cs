@@ -78,10 +78,20 @@ namespace Chat
 
     class MessageDatabase
     {
-        static string saveFile = @"User.xml";
+        static string saveFile = @"UserChat.xml";
         public List<Message> messageHistory;
         public void Save()
         {
+            try
+            {
+                messageHistory = Server.chatHistory;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             StreamWriter streamWriter = new StreamWriter(saveFile, false);
             streamWriter.WriteLine(Serializer.Serialize<MessageDatabase>(this, true));
             streamWriter.Close();
