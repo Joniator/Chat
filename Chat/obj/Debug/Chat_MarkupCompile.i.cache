@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-E:\Schule\Chat\Chat\obj\Debug\
+E:\Chat\Chat\Chat\obj\Debug\
 Chat
 none
 false
 DEBUG;TRACE
-E:\Schule\Chat\Chat\App.xaml
+E:\Chat\Chat\Chat\App.xaml
 31021667902
 
-15-1015188106
+14-164063815
 13738642453
 ChatMessage.xaml;MainWindow.xaml;MediaMessage.xaml;
 
-True
+False
 

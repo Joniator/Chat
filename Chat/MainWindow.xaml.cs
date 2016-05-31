@@ -22,61 +22,21 @@ namespace Chat
     public partial class MainWindow : Window
     {
         Client client;
-        Settings settings;
+        SettingsDatabase settings;
         public MainWindow()
         {
             InitializeComponent();
             client = new Client();
-
-            settings = Settings.LoadSettings();
+            client.userUI = this;
+            settings = SettingsDatabase.Load();
             textBoxServerPort.Text = settings.Port.ToString();
-            textBoxServerIP.Text = settings.IpAddress;
+            textBoxServerIP.Text = settings.IpAddress;        
+        }
 
-            #region SampleChat
-            ChatMessage newMessage = new ChatMessage()
-            {
-                HorizontalAlignment = HorizontalAlignment.Right,
-                Message = "Yo",
-                Date = DateTime.Now
-            };
-            stackPanelMessages.Children.Add(newMessage);
-
-            newMessage = new ChatMessage()
-            {
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Message = "Was geht, alles fit?",
-                From = "Swaggerboy1337",
-                Date = DateTime.Now
-            };
-            stackPanelMessages.Children.Add(newMessage);
-
-            newMessage = new ChatMessage()
-            {
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Message = "Kennt wer nen Witz?",
-                From = "DerHomoLord",
-                Date = DateTime.Now
-            };
-            stackPanelMessages.Children.Add(newMessage);
-
-            newMessage = new ChatMessage()
-            {
-                HorizontalAlignment = HorizontalAlignment.Right,
-                Message =
-                @"In der Schule: Die Lehrerin fragt die Kinder, was deren Eltern beruflich machen. Alle erzählen was, dann ist Fritzchen dran.
-
-„Mein Papa spielt Musik im Puff …“
-
-Die Lehrerin, voll geschockt, geht am selben Abend zu seinen Eltern: „Wie können Sie das Kind in dieser Atmosphäre erziehen?!“
-
-Der Vater: „Eigentlich bin ich Informatiker und spezialisiere mich auf TCP/IP Kommunikationsprotokolle in UNIX-Systemen …
-
-Aber wie soll ich das einem 7jährigen Kind erklären?!“",
-                From = "DerHomoLord",
-                Date = DateTime.Now
-            };
-            stackPanelMessages.Children.Add(newMessage);
-            #endregion  
+        public void AddChat(ChatMessage chatMessage)
+        {
+            stackPanelMessages.Children.Add(chatMessage);
+            Log.WriteLine("ADDED");
         }
 
         // Überprüft ob eine Verbindung besteht, baut eine Verbindung auf und passt den Zustand des ToggelButtons entsprechend an.
@@ -88,6 +48,7 @@ Aber wie soll ich das einem 7jährigen Kind erklären?!“",
                 if (client.Connect(textBoxUserName.Text, textBoxPassword.Text))
                 {
                     buttonToggleConnect.Content = "Connected";
+                    client.LoadChat();
                 }
                 else
                 {
@@ -113,41 +74,29 @@ Aber wie soll ich das einem 7jährigen Kind erklären?!“",
         private void buttonSend_Click(object sender, RoutedEventArgs e)
         {
             client.SendMessage(textBoxMessage.Text);
-
-            ChatMessage newMessage = new ChatMessage()
-            {
-                HorizontalAlignment = HorizontalAlignment.Right,
-                Message = textBoxMessage.Text,
-                From = textBoxUserName.Text,
-                Date = DateTime.Now
-            };
-
-            stackPanelMessages.Children.Add(newMessage);
         }
 
         // Beendet den Server wenn das Fenster geschlossen wird.
         private void Window_Closed(object sender, EventArgs e)
         {
-            Server.Stop();
+            Server.Stop();            
         }
-        
+
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
             settings.Port = Convert.ToInt32(textBoxServerPort.Text);
             settings.IpAddress = textBoxServerIP.Text;
-            settings.SaveSettings();
+            settings.Save();
 
             textBoxServerIP.Text = settings.IpAddress;
             textBoxServerPort.Text = settings.Port.ToString();
         }
-        
+
         private void buttonRegister_Click(object sender, RoutedEventArgs e)
         {
-            Database dataBase = new Database();
-
             try
             {
-                Log.WriteLine(dataBase.registration(textBoxRegUsername.Text, textBoxRegPassword.Text));
+                client.Register(textBoxRegUsername.Text, textBoxRegPassword.Text);                
             }
             catch (Exception)
             {

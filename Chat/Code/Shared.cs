@@ -58,7 +58,7 @@ namespace Chat
         /// <returns>Die nächste Zeile des Eingabestreams, bzw. null, wenn das Ende des Eingabestreams erreicht ist.</returns>
         public string ReadLine()
         {
-            return streamReader.ReadLine();
+                return streamReader.ReadLine();
         }
 
         /// <summary>
@@ -70,35 +70,18 @@ namespace Chat
             streamWriter.WriteLine(Value);
         }
 
+        internal void Close()
+        {
+            streamReader.Close();
+            streamWriter.Close();
+        }
+
         public void Flush()
         {
             streamWriter.Flush();
         }
     }
 
-    public class Message
-    {
-        public Command content;
-
-        byte[] media;
-
-        public string sender;
-
-        public DateTime sendTime;
-
-        public Message() { }
-        public Message(Command content, string sender, DateTime sendTime)
-        {
-            this.content = content;
-            this.sender = sender;
-            this.sendTime = sendTime;
-        }
-
-        public override string ToString()
-        {
-            return Serializer.Serialize(this,false);
-        }
-    }
     public static class Serializer
     {
         /// <summary>
@@ -174,36 +157,46 @@ namespace Chat
         }
     }
 
-    public class Command
+    public class Message
     {
-        public CommandType type;
+        public Content content;
+
+        public string sender;
+
+        public DateTime sendTime;
+
+        public Message() { }
+        public Message(Content content, string sender, DateTime sendTime)
+        {
+            this.content = content;
+            this.sender = sender;
+            this.sendTime = sendTime;
+        }
+
+        public override string ToString()
+        {
+            return Serializer.Serialize(this, false);
+        }
+    }
+    public class Content
+    {
+        public ContentType type;
         public string[] parameter;
 
-        public Command() { }
-        public Command(CommandType Command, params string[] Parameter)
+        public Content() { }
+        public Content(ContentType Command, params string[] Parameter)
         {
             parameter = Parameter;
             type = Command;            
         }
     }
-    public enum CommandType
+    public enum ContentType
     {
+        Register,
+        RequestChat,
         Login,
         Message,
         Image,
         Disconnect
     }
-
-    public class Response
-    {
-        ResponseType type;
-        string parameter;
-    }
-    public enum ResponseType
-    {
-        LoginSuccesfull,
-        LoginFailed,
-        ConectionClosed
-    }
-
 }

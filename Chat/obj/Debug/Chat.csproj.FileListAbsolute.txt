@@ -14,3 +14,51 @@ E:\Schule\Chat\Chat\obj\Debug\Chat.pdb
 E:\Schule\Chat\Chat\obj\Debug\MediaMessage.g.cs
 E:\Schule\Chat\Chat\obj\Debug\MediaMessage.baml
 E:\Schule\Chat\Chat\obj\Debug\Chat.csprojResolveAssemblyReference.cache
+D:\Schule\Chat\Chat\bin\Debug\Chat.exe.config
+D:\Schule\Chat\Chat\obj\Debug\Chat.exe
+D:\Schule\Chat\Chat\obj\Debug\Chat.pdb
+D:\Schule\Chat\Chat\bin\Debug\Chat.exe
+D:\Schule\Chat\Chat\bin\Debug\Chat.pdb
+D:\Schule\Chat\Chat\obj\Debug\Chat.csprojResolveAssemblyReference.cache
+D:\Schule\Chat\Chat\obj\Debug\ChatMessage.g.cs
+D:\Schule\Chat\Chat\obj\Debug\MainWindow.g.cs
+D:\Schule\Chat\Chat\obj\Debug\MediaMessage.g.cs
+D:\Schule\Chat\Chat\obj\Debug\App.g.cs
+D:\Schule\Chat\Chat\obj\Debug\Chat_MarkupCompile.cache
+D:\Schule\Chat\Chat\obj\Debug\Chat_MarkupCompile.lref
+D:\Schule\Chat\Chat\obj\Debug\ChatMessage.baml
+D:\Schule\Chat\Chat\obj\Debug\MainWindow.baml
+D:\Schule\Chat\Chat\obj\Debug\MediaMessage.baml
+D:\Schule\Chat\Chat\obj\Debug\Chat.g.resources
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\Chat.csprojResolveAssemblyReference.cache
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\ChatMessage.g.cs
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\MainWindow.g.cs
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\MediaMessage.g.cs
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\App.g.cs
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\Chat_MarkupCompile.cache
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\Chat_MarkupCompile.lref
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\bin\Debug\Chat.exe.config
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\bin\Debug\Chat.exe
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\bin\Debug\Chat.pdb
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\ChatMessage.baml
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\MainWindow.baml
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\MediaMessage.baml
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\Chat.g.resources
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\Chat.exe
+\\DESKTOP-HR9C6B2\Neuer Ordner\Chat\Chat\obj\Debug\Chat.pdb
+E:\Chat\Chat\Chat\bin\Debug\Chat.exe.config
+E:\Chat\Chat\Chat\obj\Debug\Chat.exe
+E:\Chat\Chat\Chat\obj\Debug\Chat.pdb
+E:\Chat\Chat\Chat\obj\Debug\Chat.csprojResolveAssemblyReference.cache
+E:\Chat\Chat\Chat\obj\Debug\ChatMessage.g.cs
+E:\Chat\Chat\Chat\obj\Debug\MainWindow.g.cs
+E:\Chat\Chat\Chat\obj\Debug\MediaMessage.g.cs
+E:\Chat\Chat\Chat\obj\Debug\App.g.cs
+E:\Chat\Chat\Chat\obj\Debug\Chat_MarkupCompile.cache
+E:\Chat\Chat\Chat\obj\Debug\Chat_MarkupCompile.lref
+E:\Chat\Chat\Chat\bin\Debug\Chat.exe
+E:\Chat\Chat\Chat\bin\Debug\Chat.pdb
+E:\Chat\Chat\Chat\obj\Debug\ChatMessage.baml
+E:\Chat\Chat\Chat\obj\Debug\MainWindow.baml
+E:\Chat\Chat\Chat\obj\Debug\MediaMessage.baml
+E:\Chat\Chat\Chat\obj\Debug\Chat.g.resources
