@@ -58,7 +58,7 @@ namespace Chat
             }
         }
         
-        private void UserControl_MouseDown(object sender, MouseButtonEventArgs args)
+        private void UserControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Date = DateTime.Now;
         }

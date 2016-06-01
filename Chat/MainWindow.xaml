@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Chat"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800" Closed="Window_Closed" MinHeight="250" MinWidth="600" Background="LightGray">
+        Title="Chat" Height="500" Width="800" Closed="Window_Closed" MinHeight="250" MinWidth="600" Background="LightGray">
     <TabControl>
         <TabItem Name="tabItemChat" Header="Chat" HorizontalAlignment="Left" Width="40">
             <Grid>

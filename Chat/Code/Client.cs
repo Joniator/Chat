@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Windows;
 using System.Net.Sockets;
 using System.Windows.Threading;
+using System.Threading.Tasks;
 
 namespace Chat
 {
@@ -12,26 +13,58 @@ namespace Chat
         StreamRW streamRW;
         string username;
         public MainWindow userUI;
+        SettingsDatabase settings = SettingsDatabase.Load();
 
         DispatcherTimer dTimer;
+
+        /// Problem: Forms-Zugriffsberechtigung
+        /// Der Timer ist ein Workaround für die Zugriffsberechtigung von Forms/WPF-Elementen.
+        /// Der Timer fragt jede Sekunde nach, ob eine neue Message angekommen ist, um das OnMessageReceived-Event zu starten.
+        /// streamRW.ReadLine() würde den gesamten Thread so lange blockieren, bis eine Nachricht angekommen ist oder der Befehl Time-outet.
+        /// Solange ReadLine den Thread blockiert, kann das Userinterface nicht genutzt werden.
+        /// Eine Sekunde nach dem Timeout wird das Userinterface wieder blockiert bis entweder eine Nachricht eintrifft, oder der Reader timeoutet.
+        /// 
+        /// Das ganze in einen neuen Thread auszulagern scheidet aus, da es zu Zugriffsproblemen auf die Elemente im MainWindow kommt wenn man keinen 
+        /// Thread benutzt:
+        /// 
+        /// Thread t = new Thread(refreshMessages);
+        /// t.Start();
+        /// (Der aufrufende Thread kann nicht auf dieses Objekt zugreifen, da sich das Objekt im Besitz eines anderen Threads befindet.).
+
+        /// Workaround: Timer und ReadLineFastTO
+        /// Als Workaround haben wir den Read-Timeout vom StreamReader auf 0.2 Sekunden gesetzt, damit der Zeitraum in dem nach neuen Nachrichten gefragt wird möglichst unauffällig ist.
+        /// Damit die Funktionsweise des Readers, wenn er nicht unter Zeitdruck steht nicht gefährdet wird, haben wir eine spezielle ReadLine-Methode dafür geschrieben, die besonders schnell Timeoutet.
+
         /// <summary>
         /// Wird jede Sekunde ausgeführt und überprüft ob neue Nachrichten angekommen sind.
         /// </summary>
-        void DTimer_Tick(object sender, EventArgs e)
+        private void DTimer_Tick(object sender, EventArgs args)
         {
-            Message message = Serializer.Deserialize<Message>(streamRW.ReadLine());
+            refreshMessages();
+        }
 
-            System.Windows.HorizontalAlignment horizontallignment;
-            if (message.sender == username) horizontallignment = System.Windows.HorizontalAlignment.Right;
-            else horizontallignment = System.Windows.HorizontalAlignment.Left;
-
-            userUI.AddChat(new ChatMessage()
+        /// <summary>
+        /// Liest die aktuelle Zeile vom Stream, extrahiert die Message und löst ein MessageReceived-Event mit 
+        /// der Message aus.
+        /// </summary>
+        private void refreshMessages()
+        {
+            Message message = Serializer.Deserialize<Message>(streamRW.ReadLineFastTO());
+            if(message != default(Message))
             {
-                HorizontalAlignment = horizontallignment,
-                Message = message.content.parameter[0],
-                From = message.sender,
-                Date = message.sendTime
-            });
+                if(message.content.type == ContentType.Kicked)
+                {
+                    MessageBox.Show("Server closed connection");
+                }
+                else
+                {
+                    System.Windows.HorizontalAlignment horizontallignment;
+                    if(message.sender == username) horizontallignment = System.Windows.HorizontalAlignment.Right;
+                    else horizontallignment = System.Windows.HorizontalAlignment.Left;
+
+                    RaiseMessageReceivedEvent(horizontallignment, message.content.parameter[0], message.sender, message.sendTime);
+                }
+            }
         }
 
         /// <summary>
@@ -53,28 +86,53 @@ namespace Chat
         /// <returns>Gibt an ob die Verbindung und der Login erfolgreich waren.</returns>
         public bool Connect(string Username, string Password)
         {
-            tcpClient = new TcpClient(SettingsDatabase.Load().IpAddress, SettingsDatabase.Load().Port);
+            try
+            {
+                tcpClient = new TcpClient(settings.IpAddress, settings.Port);
 
-            streamRW = new StreamRW(tcpClient.GetStream());
+                streamRW = new StreamRW(tcpClient.GetStream());
+                Message message = new Message()
+                {
+                    content = new Content(ContentType.Login, Username, Password),
+                    sender = Username,
+                    sendTime = DateTime.Now
+                };
+                Send(message);
+                username = Username;
+
+                if(streamRW.ReadLine() == "Login successfull")
+                {
+                    return true;
+                }
+                else
+                {
+                    streamRW.Close();
+                    tcpClient.Close();
+                    return false;
+                }
+            }
+            catch(Exception e)
+            {
+                Log.WriteLine("[Server][{0}] {1}", DateTime.Now, e.InnerException);
+                MessageBox.Show("Server nicht erreichtbar");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Beendet die Verbindung mit dem Server.
+        /// </summary>
+        public void Disconnect(string Reason)
+        {
             Message message = new Message()
             {
-                content = new Content(ContentType.Login, Username, Password),
-                sender = Username,
+                content = new Content(ContentType.Disconnect, Reason),
+                sender = username,
                 sendTime = DateTime.Now
             };
             Send(message);
-            username = Username;
-
-            if (streamRW.ReadLine() == "Login successfull")
-            {
-                return true;
-            }
-            else
-            {
-                streamRW.Close();
-                tcpClient.Close();
-                return false;
-            }
+            if(dTimer != null) dTimer.Stop();
+            if(tcpClient != null) tcpClient.Close();
         }
 
         /// <summary>
@@ -82,25 +140,36 @@ namespace Chat
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
-        public void Register(string username, string password)
+        public bool Register(string username, string password)
         {
-            tcpClient = new TcpClient(SettingsDatabase.Load().IpAddress, SettingsDatabase.Load().Port);
-            streamRW = new StreamRW(tcpClient.GetStream());
-
-            Message message = new Message()
+            if(tcpClient == null || !IsConnected)
             {
-                content = new Content(ContentType.Register, username, password),
-                sender = null,
-                sendTime = DateTime.Now
-            };
+                settings = SettingsDatabase.Load();
+                tcpClient = new TcpClient(settings.IpAddress, settings.Port);
+                streamRW = new StreamRW(tcpClient.GetStream());
 
-            Send(message);
+                Message message = new Message()
+                {
+                    content = new Content(ContentType.Register, username, password),
+                    sender = null,
+                    sendTime = DateTime.Now
+                };
 
-            if (streamRW.ReadLine() == "Register succesfull")
-            {
-                Log.WriteLine("[Client][{0}] Registered.", DateTime.Now);
+                Send(message);
+                string buffer = streamRW.ReadLine();
+                if(buffer == "Register succesfull")
+                {
+                    Log.WriteLine("[Client][{0}] {1} registered.", DateTime.Now, username);
+                }
+                else
+                {
+                    MessageBox.Show(buffer);
+                    return false;
+                }
+                Disconnect("Registration finished");
+                return true;
             }
-            Disconnect();
+            return false;
         }
 
         /// <summary>
@@ -115,24 +184,18 @@ namespace Chat
             streamRW.WriteLine(sendMessage.ToString());
 
             List<Message> chatHistory = Serializer.Deserialize<List<Message>>(streamRW.ReadLine());
-            if (chatHistory != null)
-                foreach (Message message in chatHistory)
+            if(chatHistory != null)
+                foreach(Message message in chatHistory)
                 {
                     System.Windows.HorizontalAlignment horizontallignment;
-                    if (message.sender == username) horizontallignment = System.Windows.HorizontalAlignment.Right;
+                    if(message.sender == username) horizontallignment = System.Windows.HorizontalAlignment.Right;
                     else horizontallignment = System.Windows.HorizontalAlignment.Left;
 
-                    userUI.AddChat(new ChatMessage()
-                    {
-                        HorizontalAlignment = horizontallignment,
-                        Message = message.content.parameter[0],
-                        From = message.sender,
-                        Date = message.sendTime
-                    });
+                    RaiseMessageReceivedEvent(horizontallignment, message.content.parameter[0], message.sender, message.sendTime);
                 }
 
             dTimer = new DispatcherTimer();
-            dTimer.Interval = new TimeSpan(0, 0, 10);
+            dTimer.Interval = new TimeSpan(0, 0, 1);
             dTimer.Tick += DTimer_Tick;
             dTimer.Start();
         }
@@ -160,25 +223,23 @@ namespace Chat
         /// <returns></returns>
         public bool Send(Message message)
         {
-            streamRW.WriteLine(message.ToString());
+            if(streamRW != null)
+                streamRW.WriteLine(message.ToString());
 
             return true;
         }
 
         /// <summary>
-        /// Beendet die Verbindung mit dem Server.
+        /// Löst das MessageReceived-Event aus.
         /// </summary>
-        public void Disconnect()
+        private void RaiseMessageReceivedEvent(System.Windows.HorizontalAlignment Allignment, string Message, string Sender, DateTime Date)
         {
-            Message message = new Message()
+            if(OnMessageReceived != null)
             {
-                content = new Content(ContentType.Disconnect, "Quit"),
-                sender = username,
-                sendTime = DateTime.Now
-            };
-            Send(message);
-            tcpClient.Close();
+                OnMessageReceived(this, Allignment, Message, Sender, Date);
+            }
         }
-
+        public delegate void MessageReceivedEventHandler(object source, System.Windows.HorizontalAlignment Allignment, string Message, string Sender, DateTime Date);
+        public event MessageReceivedEventHandler OnMessageReceived;
     }
 }

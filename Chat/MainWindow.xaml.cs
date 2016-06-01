@@ -24,23 +24,28 @@ namespace Chat
         Client client;
         SettingsDatabase settings;
         public MainWindow()
-        {
+        {            
             InitializeComponent();
             client = new Client();
             client.userUI = this;
             settings = SettingsDatabase.Load();
             textBoxServerPort.Text = settings.Port.ToString();
-            textBoxServerIP.Text = settings.IpAddress;        
+            textBoxServerIP.Text = settings.IpAddress;
+            client.OnMessageReceived += AddChat;
         }
 
-        public void AddChat(ChatMessage chatMessage)
+        private void AddChat(object source, System.Windows.HorizontalAlignment Allignment, string Message, string Sender, DateTime Date)
         {
-            stackPanelMessages.Children.Add(chatMessage);
-            Log.WriteLine("ADDED");
+            stackPanelMessages.Children.Add(new ChatMessage()
+            {
+                HorizontalAlignment = Allignment,
+                Message = Message,
+                From = Sender,
+                Date = Date
+            });
         }
-
-        // Überprüft ob eine Verbindung besteht, baut eine Verbindung auf und passt den Zustand des ToggelButtons entsprechend an.
-        private void buttonToggleConnect_Click(object sender, RoutedEventArgs e)
+        
+        private void buttonToggleConnect_Click(object sender, RoutedEventArgs args)
         {
             if (buttonToggleConnect.IsChecked == true)
             {
@@ -52,37 +57,37 @@ namespace Chat
                 }
                 else
                 {
+                    MessageBox.Show("Login Failed");
                     buttonToggleConnect.IsChecked = false;
                 }
             }
             else
             {
                 buttonToggleConnect.Content = "Connect";
-                client.Disconnect();
+                client.Disconnect("Disconnected");
+                stackPanelMessages.Children.Clear();
             }
         }
-
-        // Startet einen Task für den Server.
-        private void buttonStartServer_Click(object sender, RoutedEventArgs e)
+    
+        private void buttonStartServer_Click(object sender, RoutedEventArgs args)
         {
-            Task t = new Task(Server.startServer);
-            t.Start();
-            Console.WriteLine(t.Id);
+                Task t = new Task(Server.startServer);
+                t.Start();
         }
-
-        // Sended eine Chatnachricht an den Server.
-        private void buttonSend_Click(object sender, RoutedEventArgs e)
+        
+        private void buttonSend_Click(object sender, RoutedEventArgs args)
         {
             client.SendMessage(textBoxMessage.Text);
+            textBoxMessage.Text = "";
         }
-
-        // Beendet den Server wenn das Fenster geschlossen wird.
-        private void Window_Closed(object sender, EventArgs e)
+        
+        private void Window_Closed(object sender, EventArgs args)
         {
-            Server.Stop();            
+            client.Disconnect("Disconnected");
+            Server.Stop();
         }
 
-        private void buttonSave_Click(object sender, RoutedEventArgs e)
+        private void buttonSave_Click(object sender, RoutedEventArgs args)
         {
             settings.Port = Convert.ToInt32(textBoxServerPort.Text);
             settings.IpAddress = textBoxServerIP.Text;
@@ -92,22 +97,32 @@ namespace Chat
             textBoxServerPort.Text = settings.Port.ToString();
         }
 
-        private void buttonRegister_Click(object sender, RoutedEventArgs e)
+        private void buttonRegister_Click(object sender, RoutedEventArgs args)
         {
-            try
+            if(buttonToggleConnect.IsChecked != true)
             {
-                client.Register(textBoxRegUsername.Text, textBoxRegPassword.Text);                
+                try
+                {
+                    if(client.Register(textBoxRegUsername.Text, textBoxRegPassword.Text))
+                    {
+                        MessageBox.Show("Registered successfully");
+                    }
+                }
+                catch(Exception e)
+                {
+                    Log.WriteLine("[MainWindow][{0}] {1}", DateTime.Now, e.InnerException);
+                    MessageBox.Show("Registration failed");
+                }
             }
-            catch (Exception)
+            else
             {
-
-                throw;
+                MessageBox.Show("Log out before register");
             }
         }
 
-        private void textBoxMessage_KeyDown(object sender, KeyEventArgs e)
+        private void textBoxMessage_KeyDown(object sender, KeyEventArgs args)
         {
-            if(e.Key == Key.Enter)
+            if(args.Key == Key.Enter)
             {
                 client.SendMessage(textBoxMessage.Text);
                 textBoxMessage.Text = "";
