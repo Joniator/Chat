@@ -23,29 +23,32 @@ namespace Chat
         /// </summary>
         public static void startServer()
         {
-            userDatabase = UserDatabase.Load();
-            messageDatabase = MessageDatabase.Load();
-            chatHistory = MessageDatabase.Load().messageHistory;
-            Running = true;
-
-            connectedUser = new List<Connection>();
-            tcpListener = new TcpListener(IPAddress.Any, settings.Port);
-            tcpListener.Start();
-
-            Log.WriteLine("[Server][{0}]: Listener started at port {1}", DateTime.Now, settings.Port);
-            // Wartet auf Anfragen von Clients solange der Server gestartet ist.
-            while(Running)
+            if(!Running)
             {
-                try
+                userDatabase = UserDatabase.Load();
+                messageDatabase = MessageDatabase.Load();
+                chatHistory = MessageDatabase.Load().messageHistory;
+                Running = true;
+
+                connectedUser = new List<Connection>();
+                tcpListener = new TcpListener(IPAddress.Any, settings.Port);
+                tcpListener.Start();
+
+                Log.WriteLine("[Server][{0}]: Listener started at port {1}", DateTime.Now, settings.Port);
+                // Wartet auf Anfragen von Clients solange der Server gestartet ist.
+                while(Running)
                 {
-                    AcceptClient(tcpListener.AcceptTcpClient());
+                    try
+                    {
+                        AcceptClient(tcpListener.AcceptTcpClient());
+                    }
+                    catch(Exception e)
+                    {
+                        Log.WriteLine("[Server][{0}]{1}", DateTime.Now, e.InnerException);
+                    }
                 }
-                catch(Exception e)
-                {
-                    Log.WriteLine("[Server][{0}]{1}", DateTime.Now, e.InnerException);
-                }
+                tcpListener.Stop();
             }
-            tcpListener.Stop();
         }
 
         /// <summary>

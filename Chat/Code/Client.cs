@@ -15,6 +15,17 @@ namespace Chat
         public MainWindow userUI;
         SettingsDatabase settings = SettingsDatabase.Load();
 
+        /// <summary>
+        /// Gibt zurück ob der Client mit dem Server verbunden ist.
+        /// </summary>
+        public bool IsConnected
+        {
+            get
+            {
+                return tcpClient.Connected;
+            }
+        }
+
         DispatcherTimer dTimer;
 
         /// Problem: Forms-Zugriffsberechtigung
@@ -67,16 +78,6 @@ namespace Chat
             }
         }
 
-        /// <summary>
-        /// Gibt zurück ob der Client mit dem Server verbunden ist.
-        /// </summary>
-        public bool IsConnected
-        {
-            get
-            {
-                return tcpClient.Connected;
-            }
-        }
 
         /// <summary>
         /// Verbindet mit dem Server und meldet sich mit den Nutzerdaten an.
@@ -161,7 +162,7 @@ namespace Chat
                 {
                     Log.WriteLine("[Client][{0}] {1} registered.", DateTime.Now, username);
                 }
-                else
+                else if (buffer != "")
                 {
                     MessageBox.Show(buffer);
                     return false;
